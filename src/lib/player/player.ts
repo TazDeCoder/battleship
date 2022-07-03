@@ -4,7 +4,7 @@ type Coord = [string, number];
 
 export default function Player() {
   const shots: Coord[] = [];
-  const { ships, missed, setPiece } = Gameboard();
+  const { ships, missed, setPiece, receiveAttack, areShipsSunk } = Gameboard();
   // Public methods
   const takeShot = (coord: Coord) => {
     // Checking validity of coord
@@ -27,5 +27,7 @@ export default function Player() {
     missed,
     takeShot,
     setPiece,
+    receiveAttack,
+    areShipsSunk,
   };
 }

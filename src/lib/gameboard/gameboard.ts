@@ -115,9 +115,10 @@ export default function Gameboard() {
     // This "hit" is a missed shot
     if (!foundKey) {
       missed.push(coord);
-    } else {
-      ships[foundKey].hit(coord);
+      return false;
     }
+    ships[foundKey].hit(coord);
+    return true;
   };
   const areShipsSunk = () => {
     const keys = [...Object.keys(ships)];
