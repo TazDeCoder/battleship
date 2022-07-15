@@ -1,3 +1,5 @@
+import { Coord } from '../../models/index';
+
 const ships = {
   1: {
     name: 'carrier',
@@ -20,8 +22,6 @@ const ships = {
     size: 2,
   },
 };
-
-type Coord = [string, number];
 
 export default function Ship(shipNumber: keyof typeof ships) {
   const { name, size } = ships[shipNumber];

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-type Coord = [string, number];
+import { Coord } from '../../models/index';
+
 type Direction = 'horz' | 'vert';
 
 const errorMessages = {
