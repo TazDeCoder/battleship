@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Coord } from '../../models/index';
+import { Coord, Ships } from '../../models/index';
 
 type Direction = 'horz' | 'vert';
 
@@ -74,14 +74,7 @@ export default function Gameboard() {
     new Array(10).fill(null),
     new Array(10).fill(null),
   ];
-  const ships: {
-    [key: string]: {
-      hits: Coord[];
-      positions: Coord[];
-      isSunk: () => {};
-      hit: ([ltr, num]: Coord) => {};
-    };
-  } = {};
+  const ships: Ships = {};
   const missed: Coord[] = [];
   // Public methods
   const setPiece = (
