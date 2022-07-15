@@ -1,6 +1,6 @@
-import Gameboard from '../gameboard/gameboard';
+import { Coord } from '../../models/index';
 
-type Coord = [string, number];
+import Gameboard from '../gameboard/gameboard';
 
 export default function Player() {
   const shots: Coord[] = [];
