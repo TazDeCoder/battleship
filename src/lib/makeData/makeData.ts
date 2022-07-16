@@ -1,9 +1,11 @@
+import { Coord, Ships } from '../../models/index';
+
 export default function makeData({
-  missed,
   ships,
+  missed,
 }: {
-  missed: any[];
-  ships: any;
+  ships: Ships;
+  missed: Coord[];
 }) {
   const arr: any[] = [];
   const shipKeys = [...Object.keys(ships)];
@@ -14,7 +16,7 @@ export default function makeData({
       colNum: colIdx,
     };
     shipKeys.forEach((key) => {
-      const { hits }: { hits: any[] } = ships[key];
+      const { hits }: { hits: Coord[] } = ships[key];
       missed.forEach((miss) => {
         if (miss[1] === colIdx) {
           colObj[`col${miss[0]}`] = 'o';
