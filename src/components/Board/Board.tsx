@@ -7,6 +7,7 @@ import { TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 import BoardTable from '../UI/BoardTable';
 import ShipPiece from './ShipPiece';
 
+import { Coord, Ships } from '../../models';
 import { makeData } from '../../lib/index';
 
 type Cols = {
@@ -25,10 +26,10 @@ type Cols = {
 
 type Props = {
   boardData: {
-    missed: any[];
-    ships: any;
+    ships: Ships;
+    missed: Coord[];
   };
-  onTogglePiece: (coord: [string, number]) => void;
+  onTogglePiece: (coord: Coord) => void;
 };
 
 export default function Board({ boardData, onTogglePiece }: Props) {
@@ -37,7 +38,7 @@ export default function Board({ boardData, onTogglePiece }: Props) {
       value={table.cell.value}
       col={table.column}
       row={table.cell.row}
-      onTogglePiece={(coord: [string, number]) => onTogglePiece(coord)}
+      onTogglePiece={onTogglePiece}
     />
   );
 
@@ -107,7 +108,7 @@ export default function Board({ boardData, onTogglePiece }: Props) {
     useTable({ columns, data });
 
   return (
-    <BoardTable {...getTableProps()}>
+    <BoardTable sx={{ mx: 'auto' }} {...getTableProps()}>
       <TableHead>
         {headerGroups.map((headerGroup) => (
           <TableRow {...headerGroup.getHeaderGroupProps()}>
