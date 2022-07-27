@@ -1,7 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Coord, Ships } from '../../models/index';
-
-type Direction = 'horz' | 'vert';
+import { Dir, Coord, Ships } from '../../models/index';
 
 const errorMessages = {
   collision: "Ship couldn't be place there as it will cause collision",
@@ -12,9 +10,10 @@ const errorMessages = {
 function generatePositions(
   board: boolean[][],
   coord: Coord,
-  dir: Direction,
+  dir: keyof typeof Dir,
   size: number
 ) {
+  const updatedBoard = [...board];
   const positions: Coord[] = [];
   let idx = 0;
 
@@ -23,11 +22,11 @@ function generatePositions(
     const itemIdx = coord[0].charCodeAt(0) - 65;
 
     while (idx < size) {
-      // Update internal board
-      if (board[posIdx][itemIdx]) {
+      // Update internal updatedBoard
+      if (updatedBoard[posIdx][itemIdx]) {
         throw Error(errorMessages.collision);
       }
-      board[posIdx][itemIdx] = true;
+      updatedBoard[posIdx][itemIdx] = true;
       // Update positions
       positions[idx] = [coord[0], posIdx + 1];
       posIdx += 1;
@@ -42,12 +41,12 @@ function generatePositions(
     const rowIdx = coord[1] - 1;
 
     while (idx < size) {
-      // Update internal board
+      // Update internal updatedBoard
       const ltrIdx = ltrKey.charCodeAt(0) - 65;
-      if (board[rowIdx][ltrIdx]) {
+      if (updatedBoard[rowIdx][ltrIdx]) {
         throw Error(errorMessages.collision);
       }
-      board[rowIdx][ltrIdx] = true;
+      updatedBoard[rowIdx][ltrIdx] = true;
       // Update positions
       positions[idx] = [ltrKey, coord[1]];
       ltrKey = String.fromCharCode(ltrKey.charCodeAt(0) + 1);
@@ -57,7 +56,8 @@ function generatePositions(
       idx += 1;
     }
   }
-
+  // Copy updatedBoard if no errors present
+  board = [...updatedBoard];
   return positions;
 }
 
@@ -80,7 +80,7 @@ export default function Gameboard() {
   const setPiece = (
     shipPiece: { [key: string]: any },
     coord: Coord,
-    dir: Direction
+    dir: keyof typeof Dir
   ) => {
     if (!Object.prototype.hasOwnProperty.call(ships, shipPiece.name)) {
       const { size, hits, isSunk, hit } = shipPiece;
@@ -108,9 +108,18 @@ export default function Gameboard() {
     });
     // This "hit" is a missed shot
     if (!foundKey) {
+      const foundDuplicateMissed = missed.findIndex(
+        (miss) => JSON.stringify(miss) === JSON.stringify(coord)
+      );
+      if (foundDuplicateMissed !== -1) return false;
       missed.push(coord);
       return false;
     }
+    const shipHits = ships[foundKey].hits;
+    const foundDuplicateHit = shipHits.findIndex(
+      (hit) => JSON.stringify(hit) === JSON.stringify(coord)
+    );
+    if (foundDuplicateHit !== -1) return false;
     ships[foundKey].hit(coord);
     return true;
   };
